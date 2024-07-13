@@ -1,123 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <title>Edit User</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-          rel="stylesheet">
-
-    <style>
-
-        body {
-            background-color: #FEFDED
-        }
-
-        a {
-            text-align: center;
-            color: #8CC0DE;
-        }
-
-        h1 {
-            text-align: center;
-            color: #FA7070;
-            font-family: "Roboto Medium", serif;
-        }
-
-        th {
-            padding-bottom: 10px;
-            width: fit-content;
-            padding-right: 5vh;
-            color: #508D69;
-            font-family: "Roboto", serif;
-        }
-
-        td {
-            width: fit-content;
-            color: #000000;
-            padding-right: 5vh;
-            font-family: "Roboto", serif;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-            padding-top: 100px;
-        }
-
-        .polya {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            font-family: "Roboto Medium", serif;
-        }
-
-        .polya label {
-            text-align: center;
-            margin-bottom: 1vh;
-            color: #FA7070;
-            font-family: "Roboto", serif;
-        }
-
-        .polya input {
-            text-align: center;
-            margin-bottom: .5vh;
-            color: black;
-        }
-
-        .polya select {
-            width: 177px;
-            height: 42px;
-            text-align: center;
-            margin-bottom: .5vh;
-            color: black;
-        }
-
-        .btn {
-            display: flex;
-            font-size: 14px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: "Roboto", serif;
-            justify-content: center;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-    </style>
 </head>
 <body>
-<div class="container">
-    <h1 class="f-heading">Редактировать пользователя</h1>
+<div class="col text-center">
+    <h1 class="f-heading">Редактирование пользователя</h1>
+</div>
     <form th:method="POST" th:action="@{/admin/update(id=${person.getId()})}" th:object="${person}">
-        <div class="polya">
+        <div class="col text-center">
             <label for="userName">Имя пользователя: </label>
             <input type="text" id="userName" th:field="*{username}" placeholder="Username" required>
             <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">userName Error</div>
-
         </div>
-        <div class="polya">
+
+        <div class="col text-center">
             <label for="role">Роль: </label>
             <label th:each="role : ${person.roles}" th:text="${role}"></label>
             <select th:field="*{roles}" id="role" class="select-style" multiple>
@@ -126,20 +30,22 @@
                         th:text="${role.roleName}">Choose role</option>
             </select>
         </div>
-        <div class="polya">
+
+        <div class="col text-center">
             <input type="hidden" th:field="*{password}">
             <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
         </div>
+
         <br/>
-        <div class="btn-container">
+        <div class="col text-center">
             <input type="submit" value="Обновление пользователя" class="btn"/>
         </div>
-        <div class="btn-container">
+
+        <div class="col text-center">
             <br/>
             <a th:href="@{/admin}" class="btn">Вернуться на страницу администратора</a>
         </div>
     </form>
-</div>
 
 </body>
 </html>
