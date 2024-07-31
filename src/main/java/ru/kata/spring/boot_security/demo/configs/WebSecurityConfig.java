@@ -7,37 +7,38 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import ru.kata.spring.boot_security.demo.service.PersonDetailsServiceImpl;
+
+import ru.kata.spring.boot_security.demo.service.PersonServiceImpl;
 
 @Configuration
 @EnableWebSecurity(debug = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final PersonDetailsServiceImpl personDetailsService;
+    private final PersonServiceImpl personService;
     private final SuccessUserHandler successUserHandler;
+    private final PasswordEncoderConfig getPasswordEncoder;
     @Autowired
-    public WebSecurityConfig(PersonDetailsServiceImpl personDetailsService, SuccessUserHandler successUserHandler) {
-        this.personDetailsService = personDetailsService;
+    public WebSecurityConfig(PersonServiceImpl personService, SuccessUserHandler successUserHandler, PasswordEncoderConfig getPasswordEncoder) {
+        this.personService = personService;
         this.successUserHandler = successUserHandler;
+        this.getPasswordEncoder = getPasswordEncoder;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/hello", "/auth/login", "/auth/registration").permitAll()
+                .antMatchers("/", "/hello", "/admin/login", "/admin/registration").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/auth/login")
+                .formLogin().loginPage("/admin/login")
                 .loginProcessingUrl("/process_login")
                 .successHandler(successUserHandler)
                 .permitAll()
                 .and()
                 .logout().logoutUrl("/logout")
-                .logoutSuccessUrl("/auth/login")
+                .logoutSuccessUrl("/admin/login")
                 .permitAll();
     }
 
@@ -45,14 +46,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 
-        daoAuthenticationProvider.setPasswordEncoder(getPasswordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(personDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(getPasswordEncoder.getPasswordEncoder());
+        daoAuthenticationProvider.setUserDetailsService(personService);
 
         return daoAuthenticationProvider;
-    }
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
 

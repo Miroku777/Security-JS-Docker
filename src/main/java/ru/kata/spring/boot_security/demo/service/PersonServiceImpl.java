@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.configs.PasswordEncoderConfig;
 import ru.kata.spring.boot_security.demo.entity.Person;
 import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.repositories.PeopleRepository;
@@ -20,10 +21,12 @@ import java.util.stream.Collectors;
 public class PersonServiceImpl implements PersonService, UserDetailsService {
 
     private final PeopleRepository peopleRepository;
+    private final PasswordEncoderConfig passwordEncoderConfig;
 
     @Autowired
-    public PersonServiceImpl(PeopleRepository peopleRepository) {
+    public PersonServiceImpl(PeopleRepository peopleRepository, PasswordEncoderConfig passwordEncoderConfig) {
         this.peopleRepository = peopleRepository;
+        this.passwordEncoderConfig = passwordEncoderConfig;
     }
 
     @Override
@@ -58,12 +61,14 @@ public class PersonServiceImpl implements PersonService, UserDetailsService {
     @Transactional
     @Override
     public void save(Person user) {
+        user.setPassword(passwordEncoderConfig.getPasswordEncoder().encode(user.getPassword()));
         peopleRepository.save(user);
     }
 
     @Transactional
     @Override
     public void updateUser(long id, Person personUpdate) {
+        personUpdate.setPassword(passwordEncoderConfig.getPasswordEncoder().encode(personUpdate.getPassword()));
         Person person = getUserByUsername(personUpdate.getUsername());
         if (person != null && person.getId() != personUpdate.getId()) {
             return;

@@ -14,7 +14,7 @@
 <body>
 <div class="container">
     <h1 class="f-heading">Создать нового пользователя</h1>
-    <form th:method="POST" th:action="@{/auth/registration}" th:object="${person}">
+    <form th:method="POST" th:action="@{/admin/registration}" th:object="${person}">
 
         <div class="polya">
             <div class="col text-center">
@@ -41,7 +41,7 @@
                 <hr/>
 
                 <br/>
-                <a href="/auth/login" class="btn">Войти в аккаунт</a>
+                <a href="/admin/login" class="btn">Войти в аккаунт</a>
                 <br/>
             </div>
         </div>

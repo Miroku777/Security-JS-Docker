@@ -18,6 +18,8 @@
   <div>
     <p><strong>ID:</strong> <span th:text="${person.id}"></span></p>
     <p><strong>Username:</strong> <span th:text="${person.username}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${person.email}"></span></p>
+    <p><strong>YearOfBirth:</strong> <span th:text="${person.yearOfBirth}"></span></p>
     <p><strong>Role:</strong> <span th:each="role : ${person.roles}" th:text="${role + ' '}"></span></p>
   </div>
 

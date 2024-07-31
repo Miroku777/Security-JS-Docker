@@ -5,6 +5,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -21,9 +25,21 @@ public class Person implements UserDetails {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "username")
+    @NotEmpty
+    @Column(name = "username", unique = true)
     private String username;
 
+    @NotEmpty
+    @Email
+    @Column(name = "email"/*, unique = true*/)
+    private String email;
+
+    @Min(value = 1900, message = "Год рождения должен быть больше чем 1900")
+    @Max(value = 2024, message = "Год рождения должен быть меньше чем 2024")
+    @Column(name = "year_of_birth")
+    private String yearOfBirth;
+
+    @NotEmpty
     @Column(name = "password")
     private String password;
 
@@ -36,16 +52,20 @@ public class Person implements UserDetails {
     public Person() {
     }
 
-    public Person(long id, String username, String password) {
+    public Person(long id, String username, String password, String email, String yearOfBirth) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.email = email;
+        this.yearOfBirth = yearOfBirth;
     }
 
-    public Person(long id, String username, String password, Set<Role> roles) {
+    public Person(long id, String username, String password, Set<Role> roles, String email, String yearOfBirth) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.email = email;
+        this.yearOfBirth = yearOfBirth;
         this.roles = roles;
     }
 
@@ -100,12 +120,14 @@ public class Person implements UserDetails {
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
         return id == person.id && username.equals(person.username) &&
-                password.equals(person.password) && roles == person.roles;
+                password.equals(person.password) &&Objects.equals(email, person.email)
+                && yearOfBirth == person.yearOfBirth && roles == person.roles;
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, roles);
+        return Objects.hash(id, username, password, email, yearOfBirth, roles);
     }
 
     @Override
@@ -113,6 +135,8 @@ public class Person implements UserDetails {
         return "Person{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", yearOfBirth=" + yearOfBirth +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
                 '}';
