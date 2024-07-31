@@ -5,7 +5,7 @@ import ru.kata.spring.boot_security.demo.entity.Person;
 
 import java.util.List;
 
-public interface PersonDetailsService {
+public interface PersonService {
 
     List<Person> getUsersList();
 

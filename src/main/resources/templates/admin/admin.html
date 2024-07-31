@@ -26,6 +26,8 @@
     <tr th:each="person : ${people}">
       <td th:text="${person.getId()}">Id</td>
       <td th:text="${person.getUsername()}">Username</td>
+      <td th:text="${person.getEmail()}">Email</td>
+      <td th:text="${person.getYearOfBirth()}">yearOfBirth</td>
       <td>
         <ul>
           <li th:each="role : ${person.roles}" th:text="${role.roleName}">Role</li>

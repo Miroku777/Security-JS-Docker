@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PersonDetailsServiceImpl implements PersonDetailsService, UserDetailsService {
+public class PersonServiceImpl implements PersonService, UserDetailsService {
 
     private final PeopleRepository peopleRepository;
 
     @Autowired
-    public PersonDetailsServiceImpl(PeopleRepository peopleRepository) {
+    public PersonServiceImpl(PeopleRepository peopleRepository) {
         this.peopleRepository = peopleRepository;
     }
 

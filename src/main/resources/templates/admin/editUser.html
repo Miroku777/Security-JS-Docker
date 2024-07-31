@@ -20,6 +20,16 @@
             <input type="text" id="userName" th:field="*{username}" placeholder="Username" required>
             <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">userName Error</div>
         </div>
+        <div class="col text-center">
+            <label for="email">Email пользователя: </label>
+            <input type="email" id="email" th:field="*{email}" placeholder="Email" required>
+            <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error</div>
+        </div>
+        <div class="col text-center">
+            <label for="yearOfBirth">Год рождения пользователя: </label>
+            <input type="text" id="yearOfBirth" th:field="*{yearOfBirth}" placeholder="yearOfBirth" required>
+            <div style="color:red" th:if="${#fields.hasErrors('yearOfBirth')}" th:errors="*{yearOfBirth}">yearOfBirth Error</div>
+        </div>
 
         <div class="col text-center">
             <label for="role">Роль: </label>
