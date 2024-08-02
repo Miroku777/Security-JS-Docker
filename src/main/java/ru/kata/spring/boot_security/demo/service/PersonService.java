@@ -2,7 +2,6 @@ package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.entity.Person;
-
 import java.util.List;
 
 public interface PersonService {
@@ -14,7 +13,7 @@ public interface PersonService {
     Person getUserByID(long id);
 
     @Transactional
-    void save(Person user);
+    void save(Person person);
 
     @Transactional
     void updateUser(long id, Person updateUser);

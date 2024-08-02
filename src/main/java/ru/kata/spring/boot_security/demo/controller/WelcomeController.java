@@ -5,7 +5,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class Welcome {
+public class WelcomeController {
 
     @GetMapping({"/", "/index"})
     public String sayWelcome(ModelMap model) {

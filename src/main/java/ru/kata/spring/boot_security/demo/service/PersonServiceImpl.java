@@ -6,13 +6,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.configs.PasswordEncoderConfig;
 import ru.kata.spring.boot_security.demo.entity.Person;
 import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.repositories.PeopleRepository;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,12 +20,12 @@ import java.util.stream.Collectors;
 public class PersonServiceImpl implements PersonService, UserDetailsService {
 
     private final PeopleRepository peopleRepository;
-    private final PasswordEncoderConfig passwordEncoderConfig;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public PersonServiceImpl(PeopleRepository peopleRepository, PasswordEncoderConfig passwordEncoderConfig) {
+    public PersonServiceImpl(PeopleRepository peopleRepository, PasswordEncoder passwordEncoder) {
         this.peopleRepository = peopleRepository;
-        this.passwordEncoderConfig = passwordEncoderConfig;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -60,21 +59,22 @@ public class PersonServiceImpl implements PersonService, UserDetailsService {
 
     @Transactional
     @Override
-    public void save(Person user) {
-        user.setPassword(passwordEncoderConfig.getPasswordEncoder().encode(user.getPassword()));
-        peopleRepository.save(user);
+    public void save(Person person) {
+        person.setPassword(passwordEncoder.encode(person.getPassword()));
+        peopleRepository.save(person);
     }
 
     @Transactional
     @Override
     public void updateUser(long id, Person personUpdate) {
-        personUpdate.setPassword(passwordEncoderConfig.getPasswordEncoder().encode(personUpdate.getPassword()));
+        personUpdate.setPassword(passwordEncoder.encode(personUpdate.getPassword()));
         Person person = getUserByUsername(personUpdate.getUsername());
         if (person != null && person.getId() != personUpdate.getId()) {
             return;
         }
         personUpdate.setId(id);
         peopleRepository.save(personUpdate);
+
     }
 
     @Transactional

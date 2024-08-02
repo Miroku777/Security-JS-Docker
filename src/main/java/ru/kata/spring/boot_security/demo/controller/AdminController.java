@@ -7,10 +7,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entity.Person;
 import ru.kata.spring.boot_security.demo.service.PersonService;
-import ru.kata.spring.boot_security.demo.service.RegistrationService;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.util.PersonValidator;
-
 import javax.validation.Valid;
 
 @Controller
@@ -19,13 +17,12 @@ public class AdminController {
 
     private final PersonService personService;
     private final RoleService roleService;
-    private final RegistrationService registrationService;
+
     private final PersonValidator personValidator;
     @Autowired
-    public AdminController(PersonService personService, RoleService roleService, RegistrationService registrationService, PersonValidator personValidator) {
+    public AdminController(PersonService personService, RoleService roleService, PersonValidator personValidator) {
         this.personService = personService;
         this.roleService = roleService;
-        this.registrationService = registrationService;
         this.personValidator = personValidator;
     }
 
@@ -47,7 +44,7 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "admin/registration";
         }
-        registrationService.register(person);
+        personService.save(person);
         return "redirect:/admin/login";
     }
 
