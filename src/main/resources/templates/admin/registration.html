@@ -34,6 +34,17 @@
                 <input type="password" th:field="*{password}" id="password" placeholder="Password" required>
                 <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password Error</div>
 
+                <div class="col text-center">
+                    <label for="role">Роль: </label>
+                    <label th:each="role : ${person.roles}" th:text="${role}"></label>
+                    <select th:field="*{roles}" id="role" class="select-style" multiple>
+                        <option th:each="role : ${roles}"
+                                th:value="${role.id}"
+                                th:text="${role.roleName}">Choose role</option>
+                    </select>
+                    <div style="color:red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">roles Error</div>
+                </div>
+
                 <br/>
                 <input type="submit" value="Зарегистрироваться" class="btn"/>
                 <br/>

@@ -6,10 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entity.Person;
+import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.service.PersonService;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.util.PersonValidator;
 import javax.validation.Valid;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -32,19 +34,21 @@ public class AdminController {
     }
 
     @GetMapping("/registration")
-    public String registrationPage(@ModelAttribute("person") Person person) {
+    public String registrationPage(@ModelAttribute("person") Person person,
+                                   Model model) {
+        model.addAttribute("roles", roleService.getAllRoles());
         return "admin/registration";
     }
 
     @PostMapping("/registration")
-    public String performRegistration(@ModelAttribute("person")
-                                      @Valid Person person, BindingResult bindingResult) {
+    public String performRegistration(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
+                                      @RequestParam(value = "roles", required = false) Set<Role> role) {
 
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "admin/registration";
         }
-        personService.save(person);
+        personService.register(person, role);
         return "redirect:/admin/login";
     }
 

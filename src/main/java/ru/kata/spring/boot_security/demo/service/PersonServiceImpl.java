@@ -14,6 +14,7 @@ import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.repositories.PeopleRepository;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +24,8 @@ public class PersonServiceImpl implements PersonService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public PersonServiceImpl(PeopleRepository peopleRepository, PasswordEncoder passwordEncoder) {
+    public PersonServiceImpl(PeopleRepository peopleRepository,
+                             PasswordEncoder passwordEncoder) {
         this.peopleRepository = peopleRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -57,6 +59,14 @@ public class PersonServiceImpl implements PersonService, UserDetailsService {
         return peopleRepository.findById(id).orElse(null);
     }
 
+    @Override
+    @Transactional
+    public void register(Person person, Set<Role> role) {
+        //person.setRoles(roleService.getAllRoles());
+        person.setRoles(role);
+        save(person);
+    }
+
     @Transactional
     @Override
     public void save(Person person) {
@@ -74,7 +84,6 @@ public class PersonServiceImpl implements PersonService, UserDetailsService {
         }
         personUpdate.setId(id);
         peopleRepository.save(personUpdate);
-
     }
 
     @Transactional
