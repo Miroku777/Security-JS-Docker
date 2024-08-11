@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
@@ -13,7 +14,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -31,7 +31,7 @@ public class Person implements UserDetails {
 
     @NotEmpty
     @Email
-    @Column(name = "email"/*, unique = true*/)
+    @Column(name = "email")
     private String email;
 
     @Min(value = 1900, message = "Год рождения должен быть больше чем 1900")
@@ -79,9 +79,11 @@ public class Person implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRoleName()))
-                .collect(Collectors.toSet());
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        for (Role role : this.roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+        }
+        return authorities;
     }
 
     @Override
@@ -120,9 +122,8 @@ public class Person implements UserDetails {
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
         return id == person.id && username.equals(person.username) &&
-                password.equals(person.password) &&Objects.equals(email, person.email)
+                password.equals(person.password) && Objects.equals(email, person.email)
                 && yearOfBirth == person.yearOfBirth && roles == person.roles;
-
     }
 
     @Override

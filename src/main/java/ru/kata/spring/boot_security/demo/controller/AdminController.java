@@ -1,83 +1,55 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entity.Person;
-import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.service.PersonService;
-import ru.kata.spring.boot_security.demo.service.RoleService;
-import ru.kata.spring.boot_security.demo.util.PersonValidator;
-import javax.validation.Valid;
-import java.util.Set;
 
-@Controller
-@RequestMapping("/admin")
+import javax.validation.Valid;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/admin")
 public class AdminController {
 
     private final PersonService personService;
-    private final RoleService roleService;
 
-    private final PersonValidator personValidator;
     @Autowired
-    public AdminController(PersonService personService, RoleService roleService, PersonValidator personValidator) {
+    public AdminController(PersonService personService) {
         this.personService = personService;
-        this.roleService = roleService;
-        this.personValidator = personValidator;
-    }
-
-    @GetMapping("/login")
-    public String loginPage() {
-        return "admin/login";
-    }
-
-    @GetMapping("/registration")
-    public String registrationPage(@ModelAttribute("person") Person person,
-                                   Model model) {
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "admin/registration";
-    }
-
-    @PostMapping("/registration")
-    public String performRegistration(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
-                                      @RequestParam(value = "roles", required = false) Set<Role> role) {
-
-        personValidator.validate(person, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "admin/registration";
-        }
-        personService.register(person, role);
-        return "redirect:/admin/login";
     }
 
     @GetMapping()
-    public String getAllUsers(Model model) {
-        model.addAttribute("people", personService.getUsersList());
-        return "admin/admin";
+    public ResponseEntity<List<Person>> getAllUsers() {
+        return new ResponseEntity<>(personService.getUsersList(), HttpStatus.OK);
     }
 
-    @GetMapping("/edit")
-    public String editUser(@RequestParam("id") long id, Model model) {
-        model.addAttribute("person", personService.getUserByID(id));
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "admin/editUser";
+    @GetMapping("/{id}")
+    public ResponseEntity<Person> getUserById(@PathVariable("id") int id) {
+        return new ResponseEntity<>(personService.getUserByID(id), HttpStatus.OK);
     }
 
-    @PostMapping("/update")
-    public String updateUser(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
-                             @RequestParam("id") long id) {
+    @PostMapping()
+    public ResponseEntity<HttpStatus> performRegistration(@RequestBody @Valid Person person) {
+        personService.save(person);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PutMapping()
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody @Valid Person person, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "admin/editUser";
+            return ResponseEntity.ok(HttpStatus.NO_CONTENT);
         }
-        personService.updateUser(id, person);
-        return "redirect:/admin";
+        personService.updateUser(person);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PostMapping("/delete")
-    public String deleteUser(@RequestParam("id") long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") int id) {
         personService.deleteUser(id);
-        return "redirect:/admin";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

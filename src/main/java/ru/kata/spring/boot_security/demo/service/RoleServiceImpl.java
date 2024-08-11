@@ -5,13 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
+
     @Autowired
     public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
@@ -24,12 +23,7 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
-    public Set<Role> getAllRoles() {
-        return new HashSet<>(roleRepository.findAll());
-    }
-
-    @Override
-    public Role getRoleById(long id) {
-        return roleRepository.findById(id).orElse(null);
+    public Role getByName(String name) {
+        return roleRepository.findByRoleName(name);
     }
 }
