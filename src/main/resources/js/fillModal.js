@@ -1,5 +1,5 @@
 async function getUserDataById(userId) {
-    const response = await fetch(`/api/admin/${userId}`);
+    const response = await fetch(`http://localhost:8080/api/admin/${userId}`);
     return await response.json();
 }
 
@@ -17,6 +17,7 @@ async function fillModal(modal) {
         const yearOfBirthInput = modalBody.querySelector("input[data-user-id='yearOfBirth']");
         const emailInput = modalBody.querySelector("input[data-user-id='email']");
         const passwordInput = modalBody.querySelector("input[data-user-id='password']");
+        let rolesInput = modalBody.querySelector("input[data-user-id='roles']");
         if (passwordInput !== null) {
             passwordInput.value = user.password;
         }
@@ -25,27 +26,6 @@ async function fillModal(modal) {
         usernameInput.value = user.username;
         yearOfBirthInput.value = user.yearOfBirth;
         emailInput.value = user.email;
-
-
-        let rolesSelect = HTMLSelectElement;
-
-        let rolesSelectEdit = modalBody.querySelector("select[data-user-id='rolesEdit']");
-        let rolesSelectDelete = modalBody.querySelector("select[data-user-id='rolesDelete']");
-        let userRolesHTML = "";
-
-        if (rolesSelectEdit !== null) {
-            rolesSelect = rolesSelectEdit;
-            userRolesHTML +=
-                `<option value="ROLE_USER">USER</option>
-                 <option value="ROLE_ADMIN">ADMIN</option>`
-        } else if (rolesSelectDelete !== null) {
-            rolesSelect = rolesSelectDelete;
-            for (let i = 0; i < user.roles.length; i++) {
-                userRolesHTML +=
-                    `<option value="${user.roles[i].roleName}">${user.roles[i].roleName.substring(5)}</option>`;
-            }
-        }
-        rolesSelect.innerHTML = userRolesHTML;
     })
 }
 

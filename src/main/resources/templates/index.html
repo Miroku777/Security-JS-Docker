@@ -83,7 +83,7 @@
                                                     <th>ID</th>
                                                     <th>Username</th>
                                                     <th>YearOfBirth</th>
-                                                    <th>email</th>
+                                                    <th>Email</th>
                                                     <th>Password</th>
                                                     <th>Role</th>
                                                     <th>Edit</th>
@@ -126,11 +126,9 @@
                                                    placeholder="Password">
                                             <span id="passwordError" class="text-danger"></span>
                                             <br>
-                                            <label for="roles" class="form-label fw-bold mb-0">Role</label>
-                                            <select class="form-select" id="roles" size="2" multiple="multiple"
-                                                    name="rolesForController">
-                                                <option value="ROLE_USER">USER</option>
-                                                <option value="ROLE_ADMIN">ADMIN</option>
+                                            <label for="rolesNew" class="form-label fw-bold mb-0">Role</label>
+                                            <select class="form-select" id="rolesNew" size="2" multiple="multiple"
+                                                    data-user-id="roles" name="rolesNew">
                                             </select>
                                             <br>
                                             <div>
@@ -190,7 +188,7 @@
                 <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="card-body text-center">
-                <form id="modalBodyDelete">
+                <form id="formDelete">
                     <div class="modal-body col-7 mx-auto text-center">
                         <label for="idDelete" class="form-label fw-bold mb-0">ID</label>
                         <input type="text" class="form-control" id="idDelete" data-user-id="id" readonly>
@@ -204,12 +202,12 @@
                         <br>
                         <label for="emailDelete" class="form-label fw-bold mb-0">Email</label>
                         <input type="text" class="form-control" id="emailDelete" data-user-id="email" readonly>
-                        <br>
+                        <br><!--
                         <label for="rolesDelete" class="form-label fw-bold mb-0">Role</label>
-                        <select class="form-select" id="rolesDelete" data-user-id="rolesDelete" size="2"
+                        <select class="form-select" id="rolesDelete" data-user-id="roles" size="2"
                                 multiple="multiple" disabled>
                         </select>
-                        <br>
+                        <br>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -235,25 +233,25 @@
                 <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="card-body text-center">
-                <form id="modalBodyEdit">
+                <form id="formEdit">
                     <div class="modal-body col-7 mx-auto text-center">
                         <label for="idEdit" class="form-label fw-bold mb-0">ID</label>
-                        <input type="text" class="form-control" id="idEdit" data-user-id="id" readonly>
+                        <input type="text" class="form-control" id="idEdit" name="id" data-user-id="id" readonly>
                         <br>
                         <label for="usernameEdit" class="form-label fw-bold mb-0">Username</label>
-                        <input type="text" class="form-control" id="usernameEdit" data-user-id="username">
+                        <input type="text" class="form-control" id="usernameEdit" name="username" data-user-id="username">
                         <br>
                         <label for="yearOfBirthEdit" class="form-label fw-bold mb-0">YearOfBirth</label>
-                        <input type="text" class="form-control" id="yearOfBirthEdit" data-user-id="yearOfBirth">
+                        <input type="text" class="form-control" id="yearOfBirthEdit" name="yearOfBirth" data-user-id="yearOfBirth">
                         <br>
                         <label for="emailEdit" class="form-label fw-bold mb-0">Email</label>
-                        <input type="text" class="form-control" id="emailEdit" data-user-id="email">
+                        <input type="text" class="form-control" id="emailEdit" name="email" data-user-id="email">
                         <br>
                         <label for="passwordEdit" class="form-label fw-bold mb-0">Password</label>
-                        <input type="text" class="form-control" id="passwordEdit" data-user-id="password">
+                        <input type="text" class="form-control" id="passwordEdit" name="password" data-user-id="password">
                         <br>
                         <label for="rolesEdit" class="form-label fw-bold mb-0">Role</label>
-                        <select class="form-select" id="rolesEdit" data-user-id="rolesEdit" size="2"
+                        <select class="form-select" id="rolesEdit" name="rolesEdit" data-user-id="roles" size="2"
                                 multiple="multiple">
                         </select>
                         <br>

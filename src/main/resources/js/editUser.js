@@ -1,27 +1,24 @@
 async function sendDataEditUser(user) {
-    await fetch("/api/admin",
+    await fetch("http://localhost:8080/api/admin",
         {method: "PUT", headers: {'Content-type': 'application/json'}, body: JSON.stringify(user)})
 }
 
-const modalEdit = document.getElementById("editModal");
+const editModal = document.getElementById("editModal");
 
 async function EditModalHandler() {
-    await fillModal(modalEdit);
+    await fillModal(editModal);
 }
 
-
-modalEdit.addEventListener("submit", async function (event) {
+let formEdit = document.forms["formEdit"];
+formEdit.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const rolesSelected = document.getElementById("rolesEdit");
-
-    let roles = [];
-    for (let option of rolesSelected.selectedOptions) {
-        if (option.value === ROLE_USER.roleName) {
-            roles.push(ROLE_USER);
-        } else if (option.value === ROLE_ADMIN.roleName) {
-            roles.push(ROLE_ADMIN);
-        }
+    //для выбора ролей для пуша
+    let rolesForEdit = [];
+    for (let i = 0; i < formEdit.rolesEdit.options.length; i++) {
+        if (formEdit.rolesEdit.options[i].selected) rolesForEdit.push({
+            roleName: "ROLE_" + formEdit.rolesEdit.options[i].text,
+        })
     }
 
     let user = {
@@ -30,12 +27,35 @@ modalEdit.addEventListener("submit", async function (event) {
         yearOfBirth: document.getElementById("yearOfBirthEdit").value,
         email: document.getElementById("emailEdit").value,
         password: document.getElementById("passwordEdit").value,
-        roles: roles
+        roles: rolesForEdit
     }
 
     await sendDataEditUser(user);
     await fillTableOfAllUsers();
 
-    const modalBootstrap = bootstrap.Modal.getInstance(modalEdit);
+    const modalBootstrap = bootstrap.Modal.getInstance(editModal);
     modalBootstrap.hide();
+    console.log(user)
 })
+
+//для показа ролей в окне
+function loadRolesForEdit() {
+    let selectEdit = document.getElementById("rolesEdit");
+    selectEdit.innerHTML = "";
+
+    fetch("http://localhost:8080/api/admin/roles")
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(role => {
+                let option = document.createElement("option");
+                option.value = role.id;
+                option.text = role.roleName.toString().replace("ROLE_", "");
+                selectEdit.appendChild(option);
+            });
+        })
+        .catch(error => console.error(error));
+}
+
+window.addEventListener("load", loadRolesForEdit);
+
+

@@ -8,7 +8,7 @@ async function DeleteModalHandler() {
     await fillModal(modalDelete);
 }
 
-const formDelete = document.getElementById("modalBodyDelete");
+const formDelete = document.getElementById("formDelete");
 formDelete.addEventListener("submit", async function (event) {
         event.preventDefault();
 

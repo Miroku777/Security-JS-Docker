@@ -7,9 +7,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     await EditModalHandler();
 });
 
-const ROLE_USER = {roleId: 1, roleName: "ROLE_USER"};
-const ROLE_ADMIN = {roleId: 2, roleName: "ROLE_ADMIN"};
-
 async function showUserUsernameOnNavbar() {
     const currentUserUsernameNavbar = document.getElementById("currentUserUsernameNavbar")
     const currentUser = await dataAboutCurrentUser();

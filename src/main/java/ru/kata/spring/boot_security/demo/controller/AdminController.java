@@ -3,23 +3,29 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entity.Person;
+import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.service.PersonService;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class AdminController {
 
     private final PersonService personService;
+    private final RoleService roleService;
 
     @Autowired
-    public AdminController(PersonService personService) {
+    public AdminController(PersonService personService,  RoleService roleService) {
         this.personService = personService;
+        this.roleService = roleService;
     }
 
     @GetMapping()
@@ -27,8 +33,13 @@ public class AdminController {
         return new ResponseEntity<>(personService.getUsersList(), HttpStatus.OK);
     }
 
+    @GetMapping("/roles")
+    public ResponseEntity<List<Role>> getAllRoles() {
+        return new ResponseEntity<>(roleService.findAll(), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Person> getUserById(@PathVariable("id") int id) {
+    public ResponseEntity<Person> getUserById(@PathVariable("id") long id) {
         return new ResponseEntity<>(personService.getUserByID(id), HttpStatus.OK);
     }
 
@@ -47,8 +58,8 @@ public class AdminController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") int id) {
+    @DeleteMapping("/{id}") // так же
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") long id) {
         personService.deleteUser(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }

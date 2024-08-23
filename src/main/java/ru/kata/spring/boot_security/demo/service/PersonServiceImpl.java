@@ -2,7 +2,6 @@ package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class PersonServiceImpl implements PersonService, UserDetailsService {
+public class PersonServiceImpl implements PersonService {
 
     private final PeopleRepository peopleRepository;
     private final RoleService roleService;
@@ -44,11 +43,6 @@ public class PersonServiceImpl implements PersonService, UserDetailsService {
     }
 
     @Override
-    public Optional<Person> getUserByUsername(String userName) {
-        return peopleRepository.findByUsername(userName);
-    }
-
-    @Override
     public Person getUserByID(long id) {
         return peopleRepository.findById(id).orElse(null);
     }
@@ -63,7 +57,6 @@ public class PersonServiceImpl implements PersonService, UserDetailsService {
     @Transactional
     @Override
     public void updateUser(Person personUpdate) {
-        Optional<Person> person = getUserByUsername(personUpdate.getUsername());
         Person userFromDB = peopleRepository.findUserById(personUpdate.getId());
         if (personUpdate.getRoles().isEmpty()) {
             personUpdate.setRoles(userFromDB.getRoles());

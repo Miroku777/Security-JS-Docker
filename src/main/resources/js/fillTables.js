@@ -1,21 +1,22 @@
 async function dataAboutAllUsers() {
-    const response = await fetch("/api/admin");
+    const response = await fetch("http://localhost:8080/api/admin");
     return await response.json();
 }
 
 async function dataAboutCurrentUser() {
-    const response = await fetch("/api/user")
+    const response = await fetch("http://localhost:8080/api/user")
     return await response.json();
 }
 
+//для окна админа
 async function fillTableOfAllUsers() {
     const usersTable = document.getElementById("usersTable");
     const users = await dataAboutAllUsers();
 
     let usersTableHTML = "";
     for (let user of users) {
-        usersTableHTML +=
-            `<tr>
+
+        usersTableHTML += `<tr>
                 <td>${user.id}</td>
                 <td>${user.username}</td>
                 <td>${user.yearOfBirth}</td>
@@ -41,6 +42,7 @@ async function fillTableOfAllUsers() {
     usersTable.innerHTML = usersTableHTML;
 }
 
+//для окна юзера на странице админа
 async function fillTableAboutCurrentUser() {
     const currentUserTable = document.getElementById("currentUserTable");
     const currentUser = await dataAboutCurrentUser();
