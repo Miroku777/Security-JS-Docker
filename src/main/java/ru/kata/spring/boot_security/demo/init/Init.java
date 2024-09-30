@@ -36,8 +36,8 @@ public class Init {
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(userRole);
         Set<Role> allRoles = Set.of(adminRole, userRole);
-        Person admin = new Person(1, "admin", "admin", allRoles, "email@mail.ru", "1999");
-        Person user = new Person(2, "user", "user", userRoles, "email@gmail.com", "1980");
+        Person admin = new Person(1, "admin", "admin", allRoles, "email@mail.ru", 1999);
+        Person user = new Person(2, "user", "user", userRoles, "email@gmail.com", 1980);
         personService.save(admin);
         personService.save(user);
     }

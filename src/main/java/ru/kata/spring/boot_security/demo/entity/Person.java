@@ -37,7 +37,7 @@ public class Person implements UserDetails {
     @Min(value = 1900, message = "Год рождения должен быть больше чем 1900")
     @Max(value = 2024, message = "Год рождения должен быть меньше чем 2024")
     @Column(name = "year_of_birth")
-    private String yearOfBirth;
+    private int yearOfBirth;
 
     @NotEmpty
     @Column(name = "password")
@@ -52,7 +52,7 @@ public class Person implements UserDetails {
     public Person() {
     }
 
-    public Person(long id, String username, String password, String email, String yearOfBirth) {
+    public Person(long id, String username, String password, String email, int yearOfBirth) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -60,7 +60,7 @@ public class Person implements UserDetails {
         this.yearOfBirth = yearOfBirth;
     }
 
-    public Person(long id, String username, String password, Set<Role> roles, String email, String yearOfBirth) {
+    public Person(long id, String username, String password, Set<Role> roles, String email, int yearOfBirth) {
         this.id = id;
         this.username = username;
         this.password = password;
